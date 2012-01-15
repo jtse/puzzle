@@ -1,0 +1,46 @@
+# Variables
+# 
+# hide-mouse - controls mouse visibility
+#
+# This will hide the mouse cursor:
+# hide-mouse=true
+#
+# This will show the mouse cursor:
+# hide-mouse=false
+#
+#
+# background-color - sets the background color in RGB levels where 1.0 = max and 0 = min
+#
+# To set background color to white:
+# background-color=1 1 1
+#
+# To set background color to blue:
+# background-color=0 0 1
+#
+# To set background color to 50% red:
+# background-color=0.5 0 0
+#
+
+hide-mouse=true
+background-color=1 1 1
+
+# The path is relative to this file
+image=BlueFish.png
+x=0
+y=0
+
+image=GreenFish.png
+x=250
+y=0
+
+image=PurpleFish.png
+x=500
+y=0
+
+image=GreenFish.png
+x=750
+y=0
+
+image=PurpleFish.png
+x=0
+y=300
