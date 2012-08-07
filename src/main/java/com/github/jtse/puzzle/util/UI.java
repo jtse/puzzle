@@ -26,7 +26,6 @@ public class UI {
 
     try {
       SwingUtilities.invokeAndWait(new Runnable() {
-        @Override
         public void run() {
           JFrame frame = new JFrame();
           JFileChooser chooser = new JFileChooser();
@@ -51,7 +50,6 @@ public class UI {
 
     try {
       SwingUtilities.invokeAndWait(new Runnable() {
-        @Override
         public void run() {
           JFrame frame = new JFrame();
 

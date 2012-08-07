@@ -3,7 +3,7 @@
 	<property file="build.properties" />
 	<target name="compile">
 		<copy todir="target/class">
-			<fileset dir="src/main/resource" includes="**/*" />
+			<fileset dir="src/main/resources" includes="**/*" />
 		</copy>
 		<mkdir dir="target/class" />
 		<javac srcdir="src/main/java" destdir="target/class" target="1.6" source="1.6" includeantruntime="false">

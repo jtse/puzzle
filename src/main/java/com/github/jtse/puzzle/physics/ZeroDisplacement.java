@@ -20,7 +20,6 @@ public class ZeroDisplacement implements Displacement {
    * edu.binghamton.baby.puzzle.physics.Collision#apply(edu.binghamton.baby.
    * puzzle.ogl.Region, int, int, edu.binghamton.baby.puzzle.ogl.Region[])
    */
-  @Override
   public void apply(Region source, int dx, int dy, Region[] targets) {
     for (int i = 0; i < targets.length; i++) {
       if (targets[i] != source) {

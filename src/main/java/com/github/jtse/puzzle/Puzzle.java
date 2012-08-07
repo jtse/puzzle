@@ -46,7 +46,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
@@ -227,9 +226,9 @@ public class Puzzle {
    * @param y
    */
   private static void renderImage(Texture texture, int x, int y) {
-    Color.white.bind();
+    // Color.white.bind();
     // texture.bind(); // or GL11.glBind(texture.getTextureID());
-
+    GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     GL11.glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 
     // GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE,
