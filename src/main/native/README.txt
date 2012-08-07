@@ -1,1 +1,0 @@
-Native libraries for Windows, Mac OS X, and Linux
