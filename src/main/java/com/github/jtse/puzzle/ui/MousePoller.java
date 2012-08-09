@@ -22,8 +22,8 @@ import org.lwjgl.input.Mouse;
  * 
  * @author jtse
  */
-public class MouseEvents {
-  public static final MouseEvent poll() {
+public class MousePoller {
+  public MouseEvent poll() {
     return new MouseEvent(Mouse.getX(), Mouse.getY(), Mouse.isButtonDown(0));
   }
 }

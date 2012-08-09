@@ -23,7 +23,7 @@ import com.google.common.base.Function;
  * @author jtse
  */
 public class Components {
-  public Function<MouseEvent, MouseEvent> createMouseFilters() {
+  public static final Function<MouseEvent, MouseEvent> createMouseFilter() {
     return new MouseMedianFilter();
   }
 }
