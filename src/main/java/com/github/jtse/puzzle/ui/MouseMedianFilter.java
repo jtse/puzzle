@@ -20,6 +20,7 @@ import java.util.Queue;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Ordering;
 
 /**
  * @author jtse
@@ -29,7 +30,8 @@ public class MouseMedianFilter implements Function<MouseEvent, MouseEvent> {
   private final Queue<Integer> ys;
   private final Queue<Boolean> booleans;
   private final int capacity;
-  private final int size;
+  private final int middle;
+  private int size;
 
   public MouseMedianFilter(int capacity) {
     Preconditions.checkArgument(capacity > 0, "Capacity must be geater than zero.");
@@ -39,29 +41,34 @@ public class MouseMedianFilter implements Function<MouseEvent, MouseEvent> {
     this.booleans = new LinkedList<Boolean>();
     this.capacity = capacity;
     this.size = 0;
+    this.middle = capacity / 2;
   }
 
   public MouseEvent apply(MouseEvent event) {
-    if (size < capacity) {
-      this.add(event);
-      return event;
-    } else {
-      this.poll();
-      this.add(event);
-      // find median and return
-      return null;
+    this.add(event);
+    size++;
+    if (size >= capacity) {
+      event = median();
+      poll();
     }
+
+    return event;
   }
 
-  private void add(MouseEvent event) {
+  void add(MouseEvent event) {
     xs.add(event.getX());
     ys.add(event.getY());
     booleans.add(event.isButtonDown());
   }
 
-  private void poll() {
+  void poll() {
     xs.poll();
     ys.poll();
     booleans.poll();
+  }
+
+  MouseEvent median() {
+    return new MouseEvent(Ordering.natural().sortedCopy(xs).get(middle), Ordering.natural()
+        .sortedCopy(ys).get(middle), Ordering.natural().sortedCopy(booleans).get(middle));
   }
 }

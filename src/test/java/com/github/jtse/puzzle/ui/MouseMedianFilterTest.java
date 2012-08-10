@@ -24,13 +24,14 @@ import org.junit.Test;
 public class MouseMedianFilterTest {
   @Test
   public void apply() {
-    MouseMedianFilter filter = new MouseMedianFilter(3);
+    MouseMedianFilter filter = new MouseMedianFilter(5);
 
     Assert.assertEquals(new MouseEvent(1, 1, false), filter.apply(new MouseEvent(1, 1, false)));
     Assert.assertEquals(new MouseEvent(2, 2, true), filter.apply(new MouseEvent(2, 2, true)));
-    Assert.assertEquals(new MouseEvent(3, 4, false), filter.apply(new MouseEvent(3, 3, false)));
-    Assert.assertEquals(new MouseEvent(4, 3, true), filter.apply(new MouseEvent(4, 4, true)));
-    Assert.assertEquals(new MouseEvent(3, 3, true), filter.apply(new MouseEvent(5, 5, false)));
+    Assert.assertEquals(new MouseEvent(3, 4, false), filter.apply(new MouseEvent(3, 4, false)));
+    Assert.assertEquals(new MouseEvent(4, 3, true), filter.apply(new MouseEvent(4, 3, true)));
+    Assert.assertEquals(new MouseEvent(3, 3, false), filter.apply(new MouseEvent(5, 5, false)));
+    Assert.assertEquals(new MouseEvent(4, 4, true), filter.apply(new MouseEvent(5, 5, true)));
   }
 
   @Test(expected = IllegalArgumentException.class)
