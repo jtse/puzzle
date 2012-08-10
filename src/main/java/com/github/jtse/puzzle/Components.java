@@ -15,15 +15,28 @@
  */
 package com.github.jtse.puzzle;
 
+import java.util.List;
+import java.util.Map;
+
 import com.github.jtse.puzzle.ui.MouseEvent;
 import com.github.jtse.puzzle.ui.MouseMedianFilter;
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author jtse
  */
 public class Components {
-  public static final Function<MouseEvent, MouseEvent> createMouseFilter() {
-    return new MouseMedianFilter();
+  private final Map<String, String> config;
+  private final List<Map<String, String>> trials;
+
+  public Components(Map<String, String> config, List<Map<String, String>> trials) {
+    this.config = ImmutableMap.copyOf(config);
+    this.trials = ImmutableList.copyOf(trials);
+  }
+
+  public Function<MouseEvent, MouseEvent> createMouseFilter() {
+    return new MouseMedianFilter(5);
   }
 }

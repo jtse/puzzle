@@ -15,14 +15,53 @@
  */
 package com.github.jtse.puzzle.ui;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 
 /**
  * @author jtse
  */
 public class MouseMedianFilter implements Function<MouseEvent, MouseEvent> {
+  private final Queue<Integer> xs;
+  private final Queue<Integer> ys;
+  private final Queue<Boolean> booleans;
+  private final int capacity;
+  private final int size;
+
+  public MouseMedianFilter(int capacity) {
+    Preconditions.checkArgument(capacity > 0, "Capacity must be geater than zero.");
+    Preconditions.checkArgument(capacity % 2 == 1, "Capacity must be an odd number.");
+    this.xs = new LinkedList<Integer>();
+    this.ys = new LinkedList<Integer>();
+    this.booleans = new LinkedList<Boolean>();
+    this.capacity = capacity;
+    this.size = 0;
+  }
+
   public MouseEvent apply(MouseEvent event) {
-    // TODO Auto-generated method stub
-    return null;
+    if (size < capacity) {
+      this.add(event);
+      return event;
+    } else {
+      this.poll();
+      this.add(event);
+      // find median and return
+      return null;
+    }
+  }
+
+  private void add(MouseEvent event) {
+    xs.add(event.getX());
+    ys.add(event.getY());
+    booleans.add(event.isButtonDown());
+  }
+
+  private void poll() {
+    xs.poll();
+    ys.poll();
+    booleans.poll();
   }
 }
