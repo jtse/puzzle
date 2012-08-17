@@ -21,6 +21,8 @@ import java.util.Queue;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Ordering;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * @author jtse
@@ -33,7 +35,8 @@ public class MedianMouseEventFilter implements Function<MouseEvent, MouseEvent> 
   private final int middle;
   private int size;
 
-  public MedianMouseEventFilter(int capacity) {
+  @Inject
+  public MedianMouseEventFilter(@Named("median-mouse-filter-size") int capacity) {
     Preconditions.checkArgument(capacity > 0, "Capacity must be geater than zero.");
     Preconditions.checkArgument(capacity % 2 == 1, "Capacity must be an odd number.");
     this.xs = new LinkedList<Integer>();
@@ -44,6 +47,7 @@ public class MedianMouseEventFilter implements Function<MouseEvent, MouseEvent> 
     this.middle = capacity / 2;
   }
 
+  @Override
   public MouseEvent apply(MouseEvent event) {
     this.add(event);
     size++;

@@ -23,19 +23,19 @@
 # background-color=0.5 0 0
 #
 #
-#### mouse-median-filter-size
+#### median-mouse-filter-size
 # Sets the size of mouse median filter. Larger number means more filtering. 
 # More filtering means less slips while dragging but at the cost of 
 # responsiveness.
 #
 # eg:
-# mouse-median-filter-size=5
+# median-mouse-filter-size=5
 #
 #
 
 hide-mouse=true
 background-color=1 1 1
-mouse-median-filter-size=5
+median-mouse-filter-size=5
 
 # The path is relative to this file
 image=BlueFish.png

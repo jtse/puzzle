@@ -53,37 +53,57 @@ import org.slf4j.LoggerFactory;
 
 import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.physics.Displacement;
-import com.github.jtse.puzzle.physics.ZeroDisplacement;
+import com.github.jtse.puzzle.ui.DeltaMouseEventFilter;
+import com.github.jtse.puzzle.ui.MedianMouseEventFilter;
+import com.github.jtse.puzzle.ui.MouseModule;
+import com.github.jtse.puzzle.util.ScriptModule;
 import com.github.jtse.puzzle.util.ScriptUtils;
 import com.github.jtse.puzzle.util.ScriptUtils.ScriptException;
 import com.github.jtse.puzzle.util.UI;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * @author jtse
- * 
+ *
  */
 public class Puzzle {
-  private static final Logger log = LoggerFactory.getLogger(Puzzle.class);
+  private final Logger log = LoggerFactory.getLogger(Puzzle.class);
+
+  @Inject @Named("script-file")
+  private File scriptFile;
+
+  @Inject
+  private Displacement displacement;
+
+  @Inject
+  private MedianMouseEventFilter mouseEventFilter;
+
+  @Inject
+  private DeltaMouseEventFilter deltaMouseEventFilter;
 
   /**
    * @param args
    */
   public static void main(String[] args) {
-    File scriptFile = args.length > 0 ? new File(args[0]) : UI.filePrompt(System
-        .getProperty("user.dir")
-        + "/puzzle");
-
-    // Injector injector = Guice.createInjector(new BillingModule());
-    // injector.getInstance(RealBillingService.class);
+    File scriptFile = args.length > 0
+        ? new File(args[0])
+        : UI.filePrompt(System.getProperty("user.dir") + "/puzzle");
 
     if (scriptFile == null) {
       return;
     }
 
-    run(scriptFile, new ZeroDisplacement());
+    Guice.createInjector(
+            new PuzzleModule(),
+            new MouseModule(),
+            new ScriptModule(scriptFile))
+        .getInstance(Puzzle.class)
+        .run();
   }
 
-  public static void run(File scriptFile, Displacement displacement) {
+  public void run() {
     try {
       Map<String, String>[] images = ScriptUtils.read(scriptFile, "image", "x", "y");
 
@@ -224,7 +244,7 @@ public class Puzzle {
 
   /**
    * Renders a single image
-   * 
+   *
    * @param texture
    * @param x
    * @param y
