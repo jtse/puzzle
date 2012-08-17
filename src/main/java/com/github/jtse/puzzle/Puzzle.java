@@ -56,6 +56,7 @@ import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.physics.Displacement;
 import com.github.jtse.puzzle.physics.PhysicsModule;
 import com.github.jtse.puzzle.ui.DeltaMouseEventFilter;
+import com.github.jtse.puzzle.ui.MouseEvent;
 import com.github.jtse.puzzle.ui.MouseModule;
 import com.github.jtse.puzzle.ui.MousePoller;
 import com.github.jtse.puzzle.ui.UI;
@@ -160,8 +161,10 @@ public class Puzzle {
 
       boolean quit = false;
 
-      boolean wasMouseDown = false;
       while (!Display.isCloseRequested() && !quit) {
+        MouseEvent mouseEvent = mousePoller.poll();
+        MouseEvent mouseDelta = deltaMouseEventFilter.apply(mouseEvent);
+
         Display.sync(60);
 
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -172,29 +175,21 @@ public class Puzzle {
           setRegionPositions(regions, points);
         }
 
-        if (Mouse.isButtonDown(0)) {
+        if (mouseEvent.isButtonDown() && !mouseDelta.isButtonDown()) {
+          int x = mouseEvent.getX();
+          int y = height - mouseEvent.getY();
+          int dx = mouseDelta.getX();
+          int dy = mouseDelta.getY();
 
-          if (wasMouseDown) {
-            int x = Mouse.getX();
-            int y = height - Mouse.getY();
-            int dx = Mouse.getDX();
-            int dy = Mouse.getDY();
+          for (int i = 0; i < regions.length; i++) {
+            if (regions[i].contains(x, y)) {
+              regions[i].setDxDy(dx, -dy);
 
-            for (int i = 0; i < regions.length; i++) {
-              if (regions[i].contains(x, y)) {
-                regions[i].setDxDy(dx, -dy);
+              displacement.apply(regions[i], dx, -dy, regions);
 
-                displacement.apply(regions[i], dx, -dy, regions);
-
-                i = regions.length;
-              }
+              i = regions.length;
             }
           }
-
-          wasMouseDown = true;
-        } else {
-
-          wasMouseDown = false;
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
