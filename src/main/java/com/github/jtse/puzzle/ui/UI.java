@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.jtse.puzzle.util;
+package com.github.jtse.puzzle.ui;
 
 import java.io.File;
 import java.util.HashMap;
