@@ -33,7 +33,7 @@
 #
 #
 
-hide-mouse=true
+hide-mouse=false
 background-color=1 1 1
 median-mouse-filter-size=5
 
