@@ -37,10 +37,8 @@ public class ScriptUtils {
   /**
    * Reads a script file and creates an array of key-value map
    *
-   * @param file
-   *          the file to load
-   * @param requiredKeys
-   *          the required keys for each map
+   * @param file the file to load
+   * @param requiredKeys the required keys for each map
    * @return list of key-value map
    */
   public static final Map<String, String>[] read(File file, String... requiredKeys) {
