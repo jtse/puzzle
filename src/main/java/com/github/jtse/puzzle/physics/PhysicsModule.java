@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jtse.puzzle;
+package com.github.jtse.puzzle.physics;
 
-import com.github.jtse.puzzle.physics.Displacement;
-import com.github.jtse.puzzle.physics.ZeroDisplacement;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 /**
  * @author jtse
  */
-public class PuzzleModule extends AbstractModule {
+public class PhysicsModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(Displacement.class).to(ZeroDisplacement.class).in(Singleton.class);

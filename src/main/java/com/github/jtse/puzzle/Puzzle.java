@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.physics.Displacement;
+import com.github.jtse.puzzle.physics.PhysicsModule;
 import com.github.jtse.puzzle.ui.DeltaMouseEventFilter;
 import com.github.jtse.puzzle.ui.MedianMouseEventFilter;
 import com.github.jtse.puzzle.ui.MouseModule;
@@ -96,7 +97,7 @@ public class Puzzle {
     }
 
     Guice.createInjector(
-            new PuzzleModule(),
+            new PhysicsModule(),
             new MouseModule(),
             new ScriptModule(scriptFile))
         .getInstance(Puzzle.class)
