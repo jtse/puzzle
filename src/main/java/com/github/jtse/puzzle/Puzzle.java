@@ -70,7 +70,11 @@ public class Puzzle {
    */
   public static void main(String[] args) {
     File scriptFile = args.length > 0 ? new File(args[0]) : UI.filePrompt(System
-        .getProperty("user.dir") + "/puzzle");
+        .getProperty("user.dir")
+        + "/puzzle");
+
+    // Injector injector = Guice.createInjector(new BillingModule());
+    // injector.getInstance(RealBillingService.class);
 
     if (scriptFile == null) {
       return;
@@ -112,8 +116,8 @@ public class Puzzle {
       Region[] regions = new Region[images.length + 4]; // 4 is for walls
 
       for (int i = 0; i < images.length; i++) {
-        InputStream in = new FileInputStream(new File(scriptFile.getParent(),
-            images[i].get("image")));
+        InputStream in = new FileInputStream(new File(scriptFile.getParent(), images[i]
+            .get("image")));
         textures[i] = TextureLoader.getTexture("PNG", in);
         regions[i] = Region.createRegion(textures[i]);
         points[i] = new Point(Integer.parseInt(images[i].get("x")), Integer.parseInt(images[i]

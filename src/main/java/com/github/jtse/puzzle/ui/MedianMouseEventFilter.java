@@ -25,7 +25,7 @@ import com.google.common.collect.Ordering;
 /**
  * @author jtse
  */
-public class MouseMedianFilter implements Function<MouseEvent, MouseEvent> {
+public class MedianMouseEventFilter implements Function<MouseEvent, MouseEvent> {
   private final Queue<Integer> xs;
   private final Queue<Integer> ys;
   private final Queue<Boolean> booleans;
@@ -33,7 +33,7 @@ public class MouseMedianFilter implements Function<MouseEvent, MouseEvent> {
   private final int middle;
   private int size;
 
-  public MouseMedianFilter(int capacity) {
+  public MedianMouseEventFilter(int capacity) {
     Preconditions.checkArgument(capacity > 0, "Capacity must be geater than zero.");
     Preconditions.checkArgument(capacity % 2 == 1, "Capacity must be an odd number.");
     this.xs = new LinkedList<Integer>();

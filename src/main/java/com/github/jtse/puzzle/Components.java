@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.jtse.puzzle.ui.MouseEvent;
-import com.github.jtse.puzzle.ui.MouseMedianFilter;
+import com.github.jtse.puzzle.ui.MedianMouseEventFilter;
+import com.github.jtse.puzzle.ui.MousePoller;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -37,6 +38,10 @@ public class Components {
   }
 
   public Function<MouseEvent, MouseEvent> createMouseFilter() {
-    return new MouseMedianFilter(5);
+    return new MedianMouseEventFilter(5);
+  }
+
+  public MousePoller createMousePoller() {
+    return new MousePoller(createMouseFilter());
   }
 }

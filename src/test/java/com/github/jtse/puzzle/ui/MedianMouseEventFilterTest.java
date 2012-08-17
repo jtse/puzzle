@@ -21,10 +21,10 @@ import org.junit.Test;
 /**
  * @author jtse
  */
-public class MouseMedianFilterTest {
+public class MedianMouseEventFilterTest {
   @Test
   public void apply() {
-    MouseMedianFilter filter = new MouseMedianFilter(5);
+    MedianMouseEventFilter filter = new MedianMouseEventFilter(5);
 
     Assert.assertEquals(new MouseEvent(1, 1, false), filter.apply(new MouseEvent(1, 1, false)));
     Assert.assertEquals(new MouseEvent(2, 2, true), filter.apply(new MouseEvent(2, 2, true)));
@@ -36,20 +36,20 @@ public class MouseMedianFilterTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void constructorThrowsExceptionOnNegatives() {
-    new MouseMedianFilter(-1);
+    new MedianMouseEventFilter(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void constructorThrowsExceptionOnZero() {
-    new MouseMedianFilter(0);
+    new MedianMouseEventFilter(0);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void constructorThrowsExceptionOnFour() {
-    new MouseMedianFilter(4);
+    new MedianMouseEventFilter(4);
   }
 
   public void constructor() {
-    new MouseMedianFilter(5);
+    new MedianMouseEventFilter(5);
   }
 }

@@ -15,23 +15,25 @@
  */
 package com.github.jtse.puzzle.ui;
 
-import org.lwjgl.input.Mouse;
-
 import com.google.common.base.Function;
 
 /**
- * Mouse Poller
- * 
  * @author jtse
  */
-public class MousePoller {
-  private final Function<MouseEvent, MouseEvent> filter;
+public class DeltaMouseEventFilter implements Function<MouseEvent, MouseEvent> {
+  public static final MouseEvent NO_CHANGE = new MouseEvent(0, 0, false);
+  private MouseEvent previous;
 
-  public MousePoller(Function<MouseEvent, MouseEvent> filter) {
-    this.filter = filter;
-  }
+  @Override
+  public MouseEvent apply(MouseEvent current) {
+    MouseEvent change = previous == null
+        ? NO_CHANGE
+        : new MouseEvent(
+            current.getX() - previous.getX(),
+            current.getY() - previous.getY(),
+            current.isButtonDown() != previous.isButtonDown());
 
-  public MouseEvent poll() {
-    return filter.apply(new MouseEvent(Mouse.getX(), Mouse.getY(), Mouse.isButtonDown(0)));
+    previous = current;
+    return change;
   }
 }
