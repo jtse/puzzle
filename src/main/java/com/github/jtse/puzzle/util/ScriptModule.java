@@ -16,8 +16,16 @@
 package com.github.jtse.puzzle.util;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
 /**
@@ -25,9 +33,11 @@ import com.google.inject.name.Names;
  */
 public class ScriptModule extends AbstractModule {
   private final File scriptFile;
+  private final Set<String> repeatableKeys;
 
-  public ScriptModule(File scriptFile) {
+  public ScriptModule(File scriptFile, String... repeatableKeys) {
     this.scriptFile = scriptFile;
+    this.repeatableKeys = ImmutableSet.copyOf(repeatableKeys);
   }
 
   /* (non-Javadoc)
@@ -35,6 +45,20 @@ public class ScriptModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    bind(File.class).annotatedWith(Names.named("script-file")).toInstance(scriptFile);
+    bind(File.class).annotatedWith(Names.named("_script-file"))
+        .toInstance(scriptFile);
+
+    List<Map<String, String>> maps = ScriptUtils.read(scriptFile, repeatableKeys);
+    bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("_script-repeatable"))
+        .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size() - 1)));
+
+    ImmutableMap<String, String> config = ImmutableMap.copyOf(maps.get(0));
+    bind(new TypeLiteral<Map<String, String>>() {} ).annotatedWith(Names.named("_script-config"))
+        .toInstance(config);
+
+    for (Entry<String, String> entry : config.entrySet()) {
+      bind(String.class).annotatedWith(Names.named(entry.getKey()))
+          .toInstance(entry.getValue());
+    }
   }
 }

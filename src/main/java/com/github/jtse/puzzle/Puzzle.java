@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -72,7 +73,7 @@ import com.google.inject.name.Named;
 public class Puzzle {
   private final Logger log = LoggerFactory.getLogger(Puzzle.class);
 
-  @Inject @Named("script-file")
+  @Inject @Named("_script-file")
   private File scriptFile;
 
   @Inject
@@ -83,6 +84,12 @@ public class Puzzle {
 
   @Inject
   private DeltaMouseEventFilter deltaMouseEventFilter;
+
+  @Inject @Named("_script-config")
+  private Map<String, String> config;
+
+  @Inject @Named("_script-repeatable")
+  private List<Map<String, String>> images;
 
   /**
    * @param args
@@ -99,15 +106,13 @@ public class Puzzle {
     Guice.createInjector(
             new PhysicsModule(),
             new MouseModule(),
-            new ScriptModule(scriptFile))
+            new ScriptModule(scriptFile, "image", "x", "y"))
         .getInstance(Puzzle.class)
         .run();
   }
 
   public void run() {
     try {
-      Map<String, String>[] images = ScriptUtils.read(scriptFile, "image", "x", "y");
-
       int width = Display.getDisplayMode().getWidth();
       int height = Display.getDisplayMode().getHeight();
 
@@ -119,7 +124,7 @@ public class Puzzle {
       Display.setVSyncEnabled(true);
 
       // First "image" contains the header configuration
-      configure(images[0]);
+      configure(config);
 
       glEnable(GL_TEXTURE_2D);
       glEnable(GL_BLEND);
@@ -132,26 +137,26 @@ public class Puzzle {
       glMatrixMode(GL11.GL_MODELVIEW);
 
       // init resources
-      Texture[] textures = new Texture[images.length];
-      Point[] points = new Point[images.length];
-      Region[] regions = new Region[images.length + 4]; // 4 is for walls
+      Texture[] textures = new Texture[images.size()];
+      Point[] points = new Point[images.size()];
+      Region[] regions = new Region[images.size() + 4]; // 4 is for walls
 
-      for (int i = 0; i < images.length; i++) {
-        InputStream in = new FileInputStream(new File(scriptFile.getParent(), images[i]
+      for (int i = 0; i < images.size(); i++) {
+        InputStream in = new FileInputStream(new File(scriptFile.getParent(), images.get(i)
             .get("image")));
         textures[i] = TextureLoader.getTexture("PNG", in);
         regions[i] = Region.createRegion(textures[i]);
-        points[i] = new Point(Integer.parseInt(images[i].get("x")), Integer.parseInt(images[i]
-            .get("y")));
+        points[i] = new Point(Integer.parseInt(images.get(i).get("x")), Integer.parseInt(
+            images.get(i).get("y")));
       }
 
       setRegionPositions(regions, points);
 
       // Define the wall
-      regions[images.length + 0] = Region.createBlock(width, 1, 0, -1);
-      regions[images.length + 1] = Region.createBlock(1, height, width, 0);
-      regions[images.length + 2] = Region.createBlock(width, 1, 0, height);
-      regions[images.length + 3] = Region.createBlock(1, height, -1, 0);
+      regions[images.size() + 0] = Region.createBlock(width, 1, 0, -1);
+      regions[images.size() + 1] = Region.createBlock(1, height, width, 0);
+      regions[images.size() + 2] = Region.createBlock(width, 1, 0, height);
+      regions[images.size() + 3] = Region.createBlock(1, height, -1, 0);
 
       boolean quit = false;
 

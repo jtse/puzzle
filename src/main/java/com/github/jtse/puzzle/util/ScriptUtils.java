@@ -12,12 +12,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.CharMatcher;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 
 
 /**
@@ -38,14 +43,15 @@ public class ScriptUtils {
    * Reads a script file and creates an array of key-value map
    *
    * @param file the file to load
-   * @param requiredKeys the required keys for each map
-   * @return list of key-value map
+   * @param repeatableKeys the repeatable keys
+   * @return list of maps where the first map contains the non-repeatable keys and
+   * subsequent maps are repeatable keys
    */
-  public static final Map<String, String>[] read(File file, String... requiredKeys) {
+  public static final List<Map<String, String>> read(File file, Set<String> repeatableKeys) {
     FileInputStream in = null;
     try {
       in = new FileInputStream(file);
-      return read(in, requiredKeys);
+      return read(in, ImmutableSet.copyOf(repeatableKeys));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     } finally {
@@ -59,20 +65,17 @@ public class ScriptUtils {
   }
 
   @VisibleForTesting
-  static final Map<String, String>[] read(InputStream in, String... requiredKeys) {
+  static final List<Map<String, String>> read(InputStream in, Set<String> repeatableKeys) {
     int n = 1;
-
-    List<Map<String, String>> maps = new ArrayList<Map<String, String>>();
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     String line = "";
 
-    Map<String, String> map = new HashMap<String, String>();
-
+    ArrayListMultimap<String, String> tokens = ArrayListMultimap.create();
     try {
       while (line != null) {
         line = reader.readLine();
-        if (!StringUtils.isEmpty(line) && !line.startsWith("#")) {
+        if ( line != null && !CharMatcher.INVISIBLE.matchesAllOf(line) && !line.startsWith("#")) {
           String[] pair = line.split("=");
 
           if (pair.length != 2) {
@@ -84,71 +87,66 @@ public class ScriptUtils {
             }
           }
 
-          String key = StringUtils.trim(pair[0]);
-          String value = StringUtils.trim(pair[1]);
+          String key = pair[0].trim();
+          String value = pair[1].trim();
 
-          if (map.containsKey(key)) {
-            if (mapHasKeys(map, requiredKeys)) {
-              maps.add(map);
-              map = new HashMap<String, String>();
-              map.put(key, value);
-            } else {
-              throw new ScriptException("The trial before line #" + n
-                  + " is incomplete.\nTrial must contain: " + StringUtils.join(requiredKeys, ", "));
-            }
-          } else {
-            map.put(key, value);
-          }
+          tokens.put(key, value);
         }
         n++;
-      }
-
-      if (mapHasKeys(map, requiredKeys)) {
-        maps.add(map);
-      } else {
-        throw new ScriptException("The trial before line #" + n
-            + " is incomplete.\nTrial must contain: " + StringUtils.join(requiredKeys, ", "));
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    tokens.trimToSize();
 
-    @SuppressWarnings("unchecked")
-    Map<String, String>[] a = new Map[0];
-    return maps.toArray(a);
-  }
-
-  @VisibleForTesting
-  static final boolean mapHasKeys(Map<String, String> map, String... requiredKeys) {
-    for (String key : requiredKeys) {
-      if (!map.containsKey(key)) {
-        return false;
+    Map<String, String> nonRepeatable = new HashMap<String, String>();
+    for(String key : tokens.keySet()) {
+      if ( !repeatableKeys.contains(key)) {
+        List<String> values = tokens.get(key);
+        if (values.size() == 1) {
+          nonRepeatable.put(key, values.get(0));
+        } else {
+          throw new ScriptException("Multiple entries for '" + key + "' not allowed.");
+        }
       }
     }
-    return true;
-  }
 
-  @VisibleForTesting
-  static final Map<String, String> toMap(String... keyValues) {
-    Map<String, String> map = new HashMap<String, String>();
+    Iterator<String> iterator = repeatableKeys.iterator();
+    String firstKey = iterator.next();
+    int firstSize = tokens.get(firstKey).size();
 
-    String key = null;
-    for (int i = 0; i < keyValues.length; i++) {
-      if (i % 2 == 0) {
-        key = keyValues[i];
-        map.put(key, null);
-      } else {
-        map.put(key, keyValues[i]);
+    while (iterator.hasNext()) {
+      String key = iterator.next();
+      if (tokens.get(key).size() != firstSize) {
+        throw new ScriptException(
+            "'" + firstKey + "' and '" + key + "' must have the same number of entries");
       }
     }
-    return map;
+
+    ArrayList<Map<String, String>> repeatables = Lists.newArrayListWithCapacity(firstSize);
+    for(String key : repeatableKeys) {
+      int i = 0;
+      for(String value : tokens.get(key)) {
+        if (repeatables.size() == i) {
+          repeatables.add(new HashMap<String, String>());
+        }
+        Map<String, String> map = repeatables.get(i);
+        map.put(key, value);
+        i++;
+      }
+    }
+
+
+    return ImmutableList.<Map<String, String>>builder()
+        .add(nonRepeatable)
+        .addAll(repeatables)
+        .build();
   }
 
   /**
    * Parses color string into RGBA floating point values
    *
-   * @param color
-   *          string
+   * @param color string
    * @return array of 4 floats representing RGBA
    */
   public static final float[] parseColor(String color) {
