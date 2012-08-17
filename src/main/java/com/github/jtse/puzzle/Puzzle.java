@@ -56,8 +56,8 @@ import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.physics.Displacement;
 import com.github.jtse.puzzle.physics.PhysicsModule;
 import com.github.jtse.puzzle.ui.DeltaMouseEventFilter;
-import com.github.jtse.puzzle.ui.MedianMouseEventFilter;
 import com.github.jtse.puzzle.ui.MouseModule;
+import com.github.jtse.puzzle.ui.MousePoller;
 import com.github.jtse.puzzle.util.ScriptModule;
 import com.github.jtse.puzzle.util.ScriptUtils;
 import com.github.jtse.puzzle.util.ScriptUtils.ScriptException;
@@ -80,7 +80,7 @@ public class Puzzle {
   private Displacement displacement;
 
   @Inject
-  private MedianMouseEventFilter mouseEventFilter;
+  private MousePoller mousePoller;
 
   @Inject
   private DeltaMouseEventFilter deltaMouseEventFilter;

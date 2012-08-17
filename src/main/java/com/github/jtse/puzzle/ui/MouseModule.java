@@ -16,6 +16,7 @@
 package com.github.jtse.puzzle.ui;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 /**
@@ -26,5 +27,10 @@ public class MouseModule extends AbstractModule {
   protected void configure() {
     bind(DeltaMouseEventFilter.class).in(Singleton.class);
     bind(MedianMouseEventFilter.class).in(Singleton.class);
+  }
+
+  @Provides
+  MousePoller getMousePoller(MedianMouseEventFilter eventFilter) {
+    return new MousePoller(eventFilter);
   }
 }
