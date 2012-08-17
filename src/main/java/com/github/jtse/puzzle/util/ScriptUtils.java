@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.github.jtse.puzzle.util;
 
@@ -17,9 +17,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.annotations.VisibleForTesting;
+
+
 /**
  * Utilities for parsing script file
- * 
+ *
  * @author jtse
  */
 public class ScriptUtils {
@@ -33,7 +36,7 @@ public class ScriptUtils {
 
   /**
    * Reads a script file and creates an array of key-value map
-   * 
+   *
    * @param file
    *          the file to load
    * @param requiredKeys
@@ -47,7 +50,6 @@ public class ScriptUtils {
       return read(in, requiredKeys);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
-
     } finally {
       try {
         if (in != null) {
@@ -58,7 +60,8 @@ public class ScriptUtils {
     }
   }
 
-  public static final Map<String, String>[] read(InputStream in, String... requiredKeys) {
+  @VisibleForTesting
+  static final Map<String, String>[] read(InputStream in, String... requiredKeys) {
     int n = 1;
 
     List<Map<String, String>> maps = new ArrayList<Map<String, String>>();
@@ -117,7 +120,8 @@ public class ScriptUtils {
     return maps.toArray(a);
   }
 
-  public static final boolean mapHasKeys(Map<String, String> map, String... requiredKeys) {
+  @VisibleForTesting
+  static final boolean mapHasKeys(Map<String, String> map, String... requiredKeys) {
     for (String key : requiredKeys) {
       if (!map.containsKey(key)) {
         return false;
@@ -126,7 +130,8 @@ public class ScriptUtils {
     return true;
   }
 
-  public static final Map<String, String> toMap(String... keyValues) {
+  @VisibleForTesting
+  static final Map<String, String> toMap(String... keyValues) {
     Map<String, String> map = new HashMap<String, String>();
 
     String key = null;
@@ -143,7 +148,7 @@ public class ScriptUtils {
 
   /**
    * Parses color string into RGBA floating point values
-   * 
+   *
    * @param color
    *          string
    * @return array of 4 floats representing RGBA
