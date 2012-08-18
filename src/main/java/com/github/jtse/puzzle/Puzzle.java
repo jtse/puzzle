@@ -220,8 +220,8 @@ public class Puzzle {
         }
         log.info(s.toString(), textures.length);
 
-        throw new RuntimeException("Soemthing");
         Display.update();
+        throw new RuntimeException("Soemthing");
       }
     } catch (ScriptException e) {
       UI.confirm("Script file contains errors:\n" + e.getMessage());
