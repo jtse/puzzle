@@ -69,7 +69,6 @@ import com.google.inject.name.Named;
 
 /**
  * @author jtse
- *
  */
 public class Puzzle {
   private final Logger log = LoggerFactory.getLogger(Puzzle.class);

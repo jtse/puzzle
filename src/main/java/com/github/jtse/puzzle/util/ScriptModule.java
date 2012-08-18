@@ -54,7 +54,7 @@ public class ScriptModule extends AbstractModule {
 
     List<Map<String, String>> maps = ScriptUtils.read(scriptFile, repeatableKeys);
     bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("_script-repeatable"))
-        .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size() - 1)));
+        .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size())));
 
     HashMap<String, String> map = new HashMap<String, String>();
     map.putAll(DEFAULTS);

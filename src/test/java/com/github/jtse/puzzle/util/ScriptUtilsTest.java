@@ -24,12 +24,12 @@ public class ScriptUtilsTest {
   public void testRead() {
     List<ImmutableMap<String, String>> expected = ImmutableList.of(
         ImmutableMap.of("confKey1", "confVal1", "confKey2", "confVal2"),
-        ImmutableMap.of("key1", "val1", "key2", "val2", "key3", "val3"),
+        ImmutableMap.of("key1", "val1a", "key2", "val2a", "key3", "val3a"),
         ImmutableMap.of("key1", "val1b", "key2", "val2b", "key3", "val3b"),
         ImmutableMap.of("key1", "val1c", "key2", "val2c", "key3", "val3c"));
 
     String input = "confKey1=confVal1\n"
-        + "key1=val1\n key2=val2\nkey3=val3\n"
+        + "key1=val1a\n key2=val2a\nkey3=val3a\n"
         + "key1=val1b\n key2=val2b\nkey3=val3b\n"
         + "key1=val1c\n key2=val2c\nkey3=val3c\n"
         + "confKey2=confVal2\n";
