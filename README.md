@@ -5,14 +5,23 @@ Puzzle experiment for toddlers. Written in Java using OpenGL. Not meant for publ
 
 Developer Notes
 ===============
-Build from source
------------------
-Make sure Maven is install on your system. Then open up a command line:
+Compile from source
+-------------------
+Make sure Maven is installed. Then open up a command prompt:
 
 1. `cd [THIS_DIRECTORY]`
 2. `mvn package`
 
 This will create a target/puzzle-${VERSION}.one-jar.jar containing all the dependencies.
+
+
+Run from source
+---------------
+Again, make sure Maven is installed and open up a command prompt:
+
+1. `cd [THIS DIRETORY]`
+2. `mvn compile exec:exec`
+
 
 Dependent libraries
 -------------------
