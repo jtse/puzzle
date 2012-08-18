@@ -29,13 +29,12 @@
 # responsiveness.
 #
 # eg:
-# median-mouse-filter-size=5
+# median-mouse-filter-size=11
 #
 #
 
 hide-mouse=false
 background-color=1 1 1
-median-mouse-filter-size=11
 
 # The path is relative to this file
 image=BlueFish.png

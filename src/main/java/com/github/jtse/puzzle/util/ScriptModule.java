@@ -16,6 +16,7 @@
 package com.github.jtse.puzzle.util;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +33,9 @@ import com.google.inject.name.Names;
  * @author jtse
  */
 public class ScriptModule extends AbstractModule {
+  private static final Map<String, String> DEFAULTS = ImmutableMap.of(
+      "median-mouse-filter-size", "11");
+
   private final File scriptFile;
   private final Set<String> repeatableKeys;
 
@@ -52,7 +56,12 @@ public class ScriptModule extends AbstractModule {
     bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("_script-repeatable"))
         .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size() - 1)));
 
-    ImmutableMap<String, String> config = ImmutableMap.copyOf(maps.get(0));
+    HashMap<String, String> map = new HashMap<String, String>();
+    map.putAll(DEFAULTS);
+    map.putAll(maps.get(0));
+
+    ImmutableMap<String, String> config = ImmutableMap.copyOf(map);
+
     bind(new TypeLiteral<Map<String, String>>() {} ).annotatedWith(Names.named("_script-config"))
         .toInstance(config);
 
