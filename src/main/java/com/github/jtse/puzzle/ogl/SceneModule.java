@@ -32,8 +32,7 @@ import com.google.inject.name.Named;
  * @author jtse
  */
 public class SceneModule extends AbstractModule {
-
-  /* (non-Javadoc)
+    /* (non-Javadoc)
    * @see com.google.inject.AbstractModule#configure()
    */
   @Override
@@ -62,10 +61,15 @@ public class SceneModule extends AbstractModule {
   }
 
   @Provides @Named("@render-background")
-  Runnable getRenderBackground(@Named("background-image") String imageFile) {
-    return new Runnable() {
-        @Override
-        public void run() {
-        }};
+  Runnable getRenderBackground(@Named("background-image") final String imageFile) {
+    return imageFile.isEmpty()
+        ? new Runnable() {
+            @Override
+            public void run() {
+            }}
+        : new Runnable() {
+            @Override
+            public void run() {
+            }};
   }
 }

@@ -19,8 +19,14 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
 /**
  * @author jtse
@@ -65,5 +71,18 @@ public class Textures {
     GL11.glVertex2d(x, y + texture.getTextureHeight());
 
     glEnd();
+  }
+
+  public static Texture createImage(InputStream in) throws IOException {
+    return TextureLoader.getTexture("PNG", in);
+  }
+
+  public static Texture createImage(File imageFile) throws IOException {
+    InputStream in = new FileInputStream(imageFile);
+    try {
+      return createImage(in);
+    } finally {
+      in.close();
+    }
   }
 }

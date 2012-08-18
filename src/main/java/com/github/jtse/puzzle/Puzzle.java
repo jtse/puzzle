@@ -31,8 +31,6 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 import java.awt.Point;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +38,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,9 +147,7 @@ public class Puzzle {
       Region[] regions = new Region[images.size() + 4]; // 4 is for walls
 
       for (int i = 0; i < images.size(); i++) {
-        InputStream in = new FileInputStream(new File(basePath, images.get(i)
-            .get("image")));
-        textures[i] = TextureLoader.getTexture("PNG", in);
+        textures[i] = Textures.createImage(new File(basePath, images.get(i).get("image")));
         regions[i] = Region.createRegion(textures[i]);
         points[i] = new Point(Integer.parseInt(images.get(i).get("x")), Integer.parseInt(
             images.get(i).get("y")));
