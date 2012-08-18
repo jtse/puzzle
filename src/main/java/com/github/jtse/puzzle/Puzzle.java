@@ -237,7 +237,7 @@ public class Puzzle {
   private static void renderImage(Texture texture, int x, int y) {
     // Color.white.bind();
     // texture.bind(); // or GL11.glBind(texture.getTextureID());
-    GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    //GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     GL11.glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 
     // GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE,
