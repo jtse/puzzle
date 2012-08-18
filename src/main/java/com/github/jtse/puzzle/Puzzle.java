@@ -56,7 +56,7 @@ import com.github.jtse.puzzle.ui.MouseModule;
 import com.github.jtse.puzzle.ui.MousePoller;
 import com.github.jtse.puzzle.ui.UI;
 import com.github.jtse.puzzle.util.ScriptModule;
-import com.github.jtse.puzzle.util.ScriptUtils.ScriptException;
+import com.github.jtse.puzzle.util.Scripts.ScriptException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
@@ -81,7 +81,7 @@ public class Puzzle {
   private DeltaMouseEventFilter deltaMouseEventFilter;
 
   @Inject @Named("_configure-scene")
-  Runnable configureScene;
+  private Runnable configureScene;
 
   @Inject @Named("_script-repeatable")
   private List<Map<String, String>> images;
