@@ -24,7 +24,6 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
@@ -36,15 +35,10 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.BooleanUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -52,6 +46,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.jtse.puzzle.ogl.ConfigureSceneModule;
 import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.physics.Displacement;
 import com.github.jtse.puzzle.physics.PhysicsModule;
@@ -61,7 +56,6 @@ import com.github.jtse.puzzle.ui.MouseModule;
 import com.github.jtse.puzzle.ui.MousePoller;
 import com.github.jtse.puzzle.ui.UI;
 import com.github.jtse.puzzle.util.ScriptModule;
-import com.github.jtse.puzzle.util.ScriptUtils;
 import com.github.jtse.puzzle.util.ScriptUtils.ScriptException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -86,8 +80,8 @@ public class Puzzle {
   @Inject
   private DeltaMouseEventFilter deltaMouseEventFilter;
 
-  @Inject @Named("_script-config")
-  private Map<String, String> config;
+  @Inject @Named("_configure-scene")
+  Runnable configureScene;
 
   @Inject @Named("_script-repeatable")
   private List<Map<String, String>> images;
@@ -109,6 +103,7 @@ public class Puzzle {
     Puzzle puzzle = null;
     try {
       puzzle = Guice.createInjector(
+              new ConfigureSceneModule(),
               new PhysicsModule(),
               new MouseModule(),
               new ScriptModule(scriptFile, "image", "x", "y"))
@@ -134,8 +129,7 @@ public class Puzzle {
 
       Display.setVSyncEnabled(true);
 
-      // First "image" contains the header configuration
-      configure(config);
+      configureScene.run();
 
       glEnable(GL_TEXTURE_2D);
       glEnable(GL_BLEND);
@@ -221,37 +215,16 @@ public class Puzzle {
         log.info(s.toString(), textures.length);
 
         Display.update();
-        throw new RuntimeException("Soemthing");
       }
-    } catch (ScriptException e) {
-      UI.confirm("Script file contains errors:\n" + e.getMessage());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-    } finally {
       Display.destroy();
+      UI.confirm(e.getClass() == ScriptException.class
+          ? "Script file contains errors:\n" + e.getMessage()
+          : e.getMessage());
+      return;
     }
-  }
-
-  private static void configure(final Map<String, String> config) {
-    if (config.containsKey("background-color")) {
-      float[] colors = ScriptUtils.parseColor(config.get("background-color"));
-      glClearColor(colors[0], colors[1], colors[2], colors[3]);
-    } else {
-      glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    if (config.containsKey("hide-mouse")) {
-      boolean hide = BooleanUtils.toBoolean(config.get("hide-mouse"));
-      if (hide) {
-        try {
-          // Create transparent cursor
-          Cursor transparentCursor = new Cursor(1, 1, 0, 0, 1, IntBuffer.allocate(1), null);
-          Mouse.setNativeCursor(transparentCursor);
-        } catch (LWJGLException e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
+    Display.destroy();
   }
 
   /**

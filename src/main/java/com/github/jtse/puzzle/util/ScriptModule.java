@@ -34,6 +34,8 @@ import com.google.inject.name.Names;
  */
 public class ScriptModule extends AbstractModule {
   private static final Map<String, String> DEFAULTS = ImmutableMap.of(
+      "hide-mouse", "true",
+      "background-color", "1.0 1.0 1.0 1.0",
       "median-mouse-filter-size", "11");
 
   private final File scriptFile;
