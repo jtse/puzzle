@@ -65,6 +65,7 @@ import com.github.jtse.puzzle.util.ScriptUtils;
 import com.github.jtse.puzzle.util.ScriptUtils.ScriptException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.ProvisionException;
 import com.google.inject.name.Named;
 
 /**
@@ -95,6 +96,8 @@ public class Puzzle {
    * @param args
    */
   public static void main(String[] args) {
+    Logger log = LoggerFactory.getLogger(Puzzle.class);
+
     File scriptFile = args.length > 0
         ? new File(args[0])
         : UI.filePrompt(System.getProperty("user.dir") + "/puzzle");
@@ -103,12 +106,20 @@ public class Puzzle {
       return;
     }
 
-    Guice.createInjector(
-            new PhysicsModule(),
-            new MouseModule(),
-            new ScriptModule(scriptFile, "image", "x", "y"))
-        .getInstance(Puzzle.class)
-        .run();
+    Puzzle puzzle = null;
+    try {
+      puzzle = Guice.createInjector(
+              new PhysicsModule(),
+              new MouseModule(),
+              new ScriptModule(scriptFile, "image", "x", "y"))
+          .getInstance(Puzzle.class);
+    } catch (ProvisionException e) {
+      log.error("Guice Errors", e);
+      UI.confirm(e.getCause().getMessage());
+      return;
+    }
+
+    puzzle.run();
   }
 
   public void run() {

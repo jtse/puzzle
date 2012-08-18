@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.github.jtse.puzzle.ConfigurationException;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ArrayListMultimap;
@@ -31,7 +32,7 @@ import com.google.common.collect.Lists;
  * @author jtse
  */
 public class ScriptUtils {
-  public static class ScriptException extends RuntimeException {
+  public static class ScriptException extends ConfigurationException {
     private static final long serialVersionUID = 1L;
 
     public ScriptException(String message) {

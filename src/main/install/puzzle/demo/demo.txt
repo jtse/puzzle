@@ -33,6 +33,7 @@
 #
 #
 
+median-mouse-filter-size=2
 hide-mouse=false
 background-color=1 1 1
 
