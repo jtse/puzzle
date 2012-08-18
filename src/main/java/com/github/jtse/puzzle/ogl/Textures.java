@@ -32,8 +32,7 @@ import org.newdawn.slick.opengl.TextureLoader;
  * @author jtse
  */
 public class Textures {
-
-  public static void renderImage(Texture texture, int x, int y) {
+  public static void renderImage(Texture texture, int x, int y, int z) {
     // Color.white.bind();
     // texture.bind(); // or GL11.glBind(texture.getTextureID());
     //GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -58,19 +57,23 @@ public class Textures {
     glBegin(GL11.GL_QUADS);
 
     GL11.glTexCoord2d(0.0d, 0.0d);
-    GL11.glVertex2d(x, y);
+    GL11.glVertex3d(x, y, z);
 
     // It's 0.99 instead of 1.0 because 1.0 creates edge artifacts
     GL11.glTexCoord2d(0.99d, 0.0d);
-    GL11.glVertex2d(x + texture.getTextureWidth(), y);
+    GL11.glVertex3d(x + texture.getTextureWidth(), y, z);
 
     GL11.glTexCoord2d(0.99d, 0.99d);
-    GL11.glVertex2d(x + texture.getTextureWidth(), y + texture.getTextureHeight());
+    GL11.glVertex3d(x + texture.getTextureWidth(), y + texture.getTextureHeight(), z);
 
     GL11.glTexCoord2d(0.0d, 0.99d);
-    GL11.glVertex2d(x, y + texture.getTextureHeight());
+    GL11.glVertex3d(x, y + texture.getTextureHeight(), z);
 
     glEnd();
+  }
+
+  public static void renderImage(Texture texture, int x, int y) {
+    renderImage(texture, x, y, 0);
   }
 
   public static Texture createImage(InputStream in) throws IOException {

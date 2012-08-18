@@ -51,7 +51,7 @@ public class RenderBackgroundProvider implements Provider<Runnable> {
               } catch (FileNotFoundException e) {
                 throw new ConfigurationException("Image not file found: " + imageFile, e);
               } catch (IOException e) {
-                throw new ConfigurationException("Unable to load image file: " + imageFile, e);
+                throw new ConfigurationException("Unable to load PNG image file: " + imageFile, e);
               }
             }
             @Override
