@@ -36,7 +36,7 @@ public class ScriptUtilsTest {
 
     InputStream in = new ByteArrayInputStream(input.getBytes());
 
-    List<Map<String, String>> actual = ScriptUtils.read(in,
+    List<Map<String, String>> actual = Scripts.read(in,
         ImmutableSet.of("key1", "key2", "key3"));
 
     Assert.assertEquals(expected, actual);
@@ -45,13 +45,13 @@ public class ScriptUtilsTest {
   @Test
   public void testParseColor() {
     float[] expected = { 1.0f, 0.5f, 0.9f, 1.0f };
-    assertArrayEquals(expected, ScriptUtils.parseColor("1.0, 0.5 0.9"));
+    assertArrayEquals(expected, Scripts.parseColor("1.0, 0.5 0.9"));
   }
 
   @Test
   public void testParseColorWith4Values() {
     float[] expected = { 1.0f, 0.5f, 0.9f, 0.5f };
-    assertArrayEquals(expected, ScriptUtils.parseColor("1.0, 0.5 0.9 	0.5"));
+    assertArrayEquals(expected, Scripts.parseColor("1.0, 0.5 0.9 	0.5"));
   }
 
   private static final void assertArrayEquals(float[] expected, float[] actual) {

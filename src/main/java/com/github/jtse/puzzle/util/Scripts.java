@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
  *
  * @author jtse
  */
-public class ScriptUtils {
+public class Scripts {
   public static class ScriptException extends ConfigurationException {
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +67,7 @@ public class ScriptUtils {
 
   @VisibleForTesting
   static final List<Map<String, String>> read(InputStream in, Set<String> repeatableKeys) {
+    // TODO(jtse): This should be rewritten.
     int n = 1;
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));

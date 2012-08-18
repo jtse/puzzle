@@ -23,7 +23,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
-import com.github.jtse.puzzle.util.ScriptUtils;
+import com.github.jtse.puzzle.util.Scripts;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -47,7 +47,7 @@ public class ConfigureSceneModule extends AbstractModule {
       ) {
     return new Runnable() {
         @Override public void run() {
-          float[] colors = ScriptUtils.parseColor(backgroundColor);
+          float[] colors = Scripts.parseColor(backgroundColor);
           glClearColor(colors[0], colors[1], colors[2], colors[3]);
 
           if (hideMouse) {
