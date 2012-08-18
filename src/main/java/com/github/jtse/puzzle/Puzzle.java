@@ -67,8 +67,8 @@ import com.google.inject.name.Named;
 public class Puzzle {
   private final Logger log = LoggerFactory.getLogger(Puzzle.class);
 
-  @Inject @Named("@script-file")
-  private File scriptFile;
+  @Inject @Named("@base-path")
+  private File basePath;
 
   @Inject
   private Displacement displacement;
@@ -105,6 +105,7 @@ public class Puzzle {
     Puzzle puzzle = null;
     try {
       puzzle = Guice.createInjector(
+              new PuzzleModule(scriptFile.getParentFile()),
               new SceneModule(),
               new PhysicsModule(),
               new MouseModule(),
@@ -149,7 +150,7 @@ public class Puzzle {
       Region[] regions = new Region[images.size() + 4]; // 4 is for walls
 
       for (int i = 0; i < images.size(); i++) {
-        InputStream in = new FileInputStream(new File(scriptFile.getParent(), images.get(i)
+        InputStream in = new FileInputStream(new File(basePath, images.get(i)
             .get("image")));
         textures[i] = TextureLoader.getTexture("PNG", in);
         regions[i] = Region.createRegion(textures[i]);

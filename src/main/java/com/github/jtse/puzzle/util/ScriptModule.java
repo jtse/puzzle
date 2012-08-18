@@ -52,9 +52,6 @@ public class ScriptModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    bind(File.class).annotatedWith(Names.named("@script-file"))
-        .toInstance(scriptFile);
-
     List<Map<String, String>> maps = Scripts.read(scriptFile, repeatableKeys);
     bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("@script-repeatable"))
         .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size())));
