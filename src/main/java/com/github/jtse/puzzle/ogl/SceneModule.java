@@ -40,7 +40,7 @@ public class SceneModule extends AbstractModule {
   protected void configure() {
   }
 
-  @Provides @Named("_configure-scene")
+  @Provides @Named("@configure-scene")
   Runnable getConfigureScene(
       @Named("hide-mouse") final boolean hideMouse,
       @Named("background-color") final String backgroundColor
@@ -61,7 +61,7 @@ public class SceneModule extends AbstractModule {
         }};
   }
 
-  @Provides @Named("_render-background")
+  @Provides @Named("@render-background")
   Runnable getRenderBackground(@Named("background-image") String imageFile) {
     return new Runnable() {
         @Override

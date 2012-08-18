@@ -52,11 +52,11 @@ public class ScriptModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    bind(File.class).annotatedWith(Names.named("_script-file"))
+    bind(File.class).annotatedWith(Names.named("@script-file"))
         .toInstance(scriptFile);
 
     List<Map<String, String>> maps = Scripts.read(scriptFile, repeatableKeys);
-    bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("_script-repeatable"))
+    bind(new TypeLiteral<List<Map<String,String>>>() {}).annotatedWith(Names.named("@script-repeatable"))
         .toInstance(ImmutableList.copyOf(maps.subList(1, maps.size())));
 
     HashMap<String, String> map = new HashMap<String, String>();
@@ -65,7 +65,7 @@ public class ScriptModule extends AbstractModule {
 
     ImmutableMap<String, String> config = ImmutableMap.copyOf(map);
 
-    bind(new TypeLiteral<Map<String, String>>() {} ).annotatedWith(Names.named("_script-config"))
+    bind(new TypeLiteral<Map<String, String>>() {} ).annotatedWith(Names.named("@script-config"))
         .toInstance(config);
 
     for (Entry<String, String> entry : config.entrySet()) {

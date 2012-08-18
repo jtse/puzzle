@@ -44,8 +44,8 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.jtse.puzzle.ogl.SceneModule;
 import com.github.jtse.puzzle.ogl.Region;
+import com.github.jtse.puzzle.ogl.SceneModule;
 import com.github.jtse.puzzle.ogl.Textures;
 import com.github.jtse.puzzle.physics.Displacement;
 import com.github.jtse.puzzle.physics.PhysicsModule;
@@ -67,7 +67,7 @@ import com.google.inject.name.Named;
 public class Puzzle {
   private final Logger log = LoggerFactory.getLogger(Puzzle.class);
 
-  @Inject @Named("_script-file")
+  @Inject @Named("@script-file")
   private File scriptFile;
 
   @Inject
@@ -79,13 +79,13 @@ public class Puzzle {
   @Inject
   private DeltaMouseEventFilter deltaMouseEventFilter;
 
-  @Inject @Named("_configure-scene")
+  @Inject @Named("@configure-scene")
   private Runnable configureScene;
 
-  @Inject @Named("_render-background")
+  @Inject @Named("@render-background")
   private Runnable renderBackground;
 
-  @Inject @Named("_script-repeatable")
+  @Inject @Named("@script-repeatable")
   private List<Map<String, String>> images;
 
   /**
