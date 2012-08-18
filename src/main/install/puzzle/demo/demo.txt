@@ -32,7 +32,15 @@
 # median-mouse-filter-size=11
 #
 #
+#### background-image
+# Sets the background-image to the specify PNG image file.
+#
+# eg:
+# background-image=background.png
+#
+#
 
+background-image=background.png
 hide-mouse=false
 
 # The path is relative to this file

@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.jtse.puzzle.ogl.Region;
+import com.github.jtse.puzzle.ogl.RenderBackgroundProvider;
 import com.github.jtse.puzzle.ogl.SceneModule;
 import com.github.jtse.puzzle.ogl.Textures;
 import com.github.jtse.puzzle.physics.Displacement;
@@ -79,8 +80,8 @@ public class Puzzle {
   @Inject @Named("@configure-scene")
   private Runnable configureScene;
 
-  @Inject @Named("@render-background")
-  private Runnable renderBackground;
+  @Inject
+  private RenderBackgroundProvider renderBackgroundProvider;
 
   @Inject @Named("@script-repeatable")
   private List<Map<String, String>> images;
@@ -124,6 +125,7 @@ public class Puzzle {
 
       Display.create();
       // Display.setDisplayMode(new DisplayMode(width, height));
+      Runnable renderBackground = renderBackgroundProvider.get();
 
       Display.setFullscreen(true);
 
