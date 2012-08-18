@@ -114,7 +114,7 @@ public class Puzzle {
               new ScriptModule(scriptFile, "image", "x", "y"))
           .getInstance(Puzzle.class);
     } catch (ProvisionException e) {
-      log.error("Guice Errors", e);
+      log.error(e.getMessage(), e);
       UI.confirm(e.getCause().getMessage());
       return;
     }
@@ -220,12 +220,13 @@ public class Puzzle {
         }
         log.info(s.toString(), textures.length);
 
+        throw new RuntimeException("Soemthing");
         Display.update();
       }
     } catch (ScriptException e) {
       UI.confirm("Script file contains errors:\n" + e.getMessage());
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      log.error(e.getMessage(), e);
     } finally {
       Display.destroy();
     }
