@@ -48,7 +48,7 @@ image=BlueFish.png
 x=0
 y=0
 
-image=GreenFish.png
+image=RedSail.png
 x=500
 y=0
 
