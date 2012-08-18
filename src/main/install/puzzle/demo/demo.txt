@@ -34,7 +34,6 @@
 #
 
 hide-mouse=false
-background-color=1 1 1
 
 # The path is relative to this file
 image=BlueFish.png
