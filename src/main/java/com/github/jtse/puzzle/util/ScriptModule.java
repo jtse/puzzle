@@ -36,7 +36,8 @@ public class ScriptModule extends AbstractModule {
   private static final Map<String, String> DEFAULTS = ImmutableMap.of(
       "hide-mouse", "true",
       "background-color", "1.0 1.0 1.0 1.0",
-      "median-mouse-filter-size", "11");
+      "median-mouse-filter-size", "11",
+      "background-image", "");
 
   private final File scriptFile;
   private final Set<String> repeatableKeys;

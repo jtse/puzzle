@@ -31,7 +31,7 @@ import com.google.inject.name.Named;
 /**
  * @author jtse
  */
-public class ConfigureSceneModule extends AbstractModule {
+public class SceneModule extends AbstractModule {
 
   /* (non-Javadoc)
    * @see com.google.inject.AbstractModule#configure()
@@ -58,6 +58,14 @@ public class ConfigureSceneModule extends AbstractModule {
               throw new RuntimeException(e);
             }
           }
+        }};
+  }
+
+  @Provides @Named("_render-background")
+  Runnable getRenderBackground(@Named("background-image") String imageFile) {
+    return new Runnable() {
+        @Override
+        public void run() {
         }};
   }
 }

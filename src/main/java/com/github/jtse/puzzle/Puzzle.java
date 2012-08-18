@@ -44,7 +44,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.jtse.puzzle.ogl.ConfigureSceneModule;
+import com.github.jtse.puzzle.ogl.SceneModule;
 import com.github.jtse.puzzle.ogl.Region;
 import com.github.jtse.puzzle.ogl.Textures;
 import com.github.jtse.puzzle.physics.Displacement;
@@ -82,6 +82,9 @@ public class Puzzle {
   @Inject @Named("_configure-scene")
   private Runnable configureScene;
 
+  @Inject @Named("_render-background")
+  private Runnable renderBackground;
+
   @Inject @Named("_script-repeatable")
   private List<Map<String, String>> images;
 
@@ -102,7 +105,7 @@ public class Puzzle {
     Puzzle puzzle = null;
     try {
       puzzle = Guice.createInjector(
-              new ConfigureSceneModule(),
+              new SceneModule(),
               new PhysicsModule(),
               new MouseModule(),
               new ScriptModule(scriptFile, "image", "x", "y"))
@@ -196,6 +199,7 @@ public class Puzzle {
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        renderBackground.run();
 
         StringBuilder s = new StringBuilder("Regions ({}): ");
         // Move regions
