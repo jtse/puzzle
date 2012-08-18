@@ -1,6 +1,8 @@
 Puzzle
 ======
-Puzzle experiment for toddlers. Written in Java using OpenGL. Not meant for public use
+Puzzle experiment for toddlers. Written in Java using JOGL. Not meant for public use.
+
+Download: http://jtse.github.com/puzzle/puzzle.jar
 
 
 Developer Notes
@@ -30,3 +32,8 @@ Dependent libraries
 * Various native libraries for OpenGL and OpenAL
 
 Removed jogg and jvorbis because of ZipException from One-Jar
+
+
+TODOs
+-----
+Break up the Puzzle class into smaller components.
