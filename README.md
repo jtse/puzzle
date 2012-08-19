@@ -2,8 +2,9 @@ Puzzle
 ======
 Puzzle experiment for toddlers. Written in Java using JOGL. Not meant for public use.
 
-Download: http://jtse.github.com/puzzle/puzzle.jar
+[Download](http://jtse.github.com/puzzle/puzzle.jar)
 
+[Example script file](https://raw.github.com/jtse/puzzle/master/src/main/install/puzzle/demo/demo.txt)
 
 Developer Notes
 ===============
