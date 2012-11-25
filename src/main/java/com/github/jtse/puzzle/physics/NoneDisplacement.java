@@ -11,7 +11,7 @@ import com.github.jtse.puzzle.ogl.Region;
  * @author jtse
  * 
  */
-public class ZeroDisplacement implements Displacement {
+public class NoneDisplacement implements Displacement {
 
   /*
    * (non-Javadoc)

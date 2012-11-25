@@ -43,8 +43,8 @@
 ### displacement
 # Sets the displacement algorithm which controls how puzzle pieces behave when moved.
 #
-# eg: zero (default)
-# displacement=zero
+# eg: none (default)
+# displacement=none
 #
 # eg: constant
 # displacement=constant
