@@ -16,7 +16,9 @@
 package com.github.jtse.puzzle.physics;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import com.google.inject.Provides;
+import com.google.inject.ProvisionException;
+import com.google.inject.name.Named;
 
 /**
  * @author jtse
@@ -24,6 +26,23 @@ import com.google.inject.Singleton;
 public class PhysicsModule extends AbstractModule {
   @Override
   protected void configure() {
-    bind(Displacement.class).to(ZeroDisplacement.class).in(Singleton.class);
+    // no-op
+  }
+
+  @Provides
+  Displacement newDisplacement(@Named("displacement") String displacement) {
+    String className = getClass().getPackage().getName() + "."
+        + displacement.substring(0, 1).toUpperCase()
+        + displacement.substring(1).toLowerCase() + "Displacement";
+    try {
+      Class<?> clazz = Class.forName(className);
+      return (Displacement) clazz.newInstance();
+    } catch (ClassNotFoundException e) {
+      throw new ProvisionException("No corresponding displacement class for " + displacement, e);
+    } catch (InstantiationException e) {
+      throw new ProvisionException("Unable to instantiate " + className, e);
+    } catch (IllegalAccessException e) {
+      throw new ProvisionException("Unable to access " + className, e);
+    }
   }
 }

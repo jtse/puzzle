@@ -1,4 +1,5 @@
 # Experiment parameters
+#
 # 
 #### hide-mouse
 # Controls mouse visibility
@@ -39,7 +40,19 @@
 # background-image=background.png
 #
 #
-
+### displacement
+# Sets the displacement algorithm which controls how puzzle pieces behave when moved.
+#
+# eg: zero (default)
+# displacement=zero
+#
+# eg: constant
+# displacement=constant
+#
+# eg: disappear when touched
+# displacement=disappear
+#
+#
 background-image=background.png
 hide-mouse=false
 

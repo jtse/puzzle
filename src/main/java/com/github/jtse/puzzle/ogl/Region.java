@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.github.jtse.puzzle.ogl;
 
@@ -10,12 +10,13 @@ import org.newdawn.slick.opengl.Texture;
 /**
  * Creates an region for a bitmap image, using the non-zero alpha values. This
  * class can be used for collision detection.
- * 
+ *
  * @author jtse
  */
 public final class Region {
   private int x;
   private int y;
+  private boolean isHidden;
   private final int width;
   private final int height;
   private final boolean[] data; // true means that there's a region
@@ -66,7 +67,7 @@ public final class Region {
 
   /**
    * Sets the delta x and delta y, useful for moving
-   * 
+   *
    * @param dx
    * @param dy
    */
@@ -77,7 +78,7 @@ public final class Region {
 
   /**
    * Sets the region position to x,y
-   * 
+   *
    * @param x
    * @param y
    */
@@ -94,9 +95,17 @@ public final class Region {
     return height;
   }
 
+  public final boolean isHidden() {
+    return isHidden;
+  }
+
+  public final void setHidden(boolean isHidden) {
+    this.isHidden = isHidden;
+  }
+
   /**
    * Determines if region contains x and y
-   * 
+   *
    * @param x
    * @param y
    * @return true of x and y inside the region
@@ -111,7 +120,7 @@ public final class Region {
 
   /**
    * This can be used for collision detection
-   * 
+   *
    * @param region
    * @return true if regions intersect
    */
@@ -130,7 +139,7 @@ public final class Region {
 
   /**
    * Constructs a region given a Texture
-   * 
+   *
    * @param texture
    * @return Region
    */
@@ -149,7 +158,7 @@ public final class Region {
       int x = j % width;
       int y = j / width;
 
-      int alpha = (int) bytes[i] & 0xFF;
+      int alpha = bytes[i] & 0xFF;
       data[j] = alpha > 128 && x < imgWidth && y < imgHeight;
     }
 
@@ -158,7 +167,7 @@ public final class Region {
 
   /**
    * Creates a block region that can be used like a wall
-   * 
+   *
    * @param width
    * @param height
    * @return
@@ -174,7 +183,7 @@ public final class Region {
 
   /**
    * Same as createBlock(width, height) but with initial x,y set
-   * 
+   *
    * @param width
    * @param height
    * @param x

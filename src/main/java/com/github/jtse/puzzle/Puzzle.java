@@ -211,7 +211,9 @@ public class Puzzle {
             s.append(",");
           }
 
-          Textures.renderImage(textures[i], x, y);
+          if (!regions[i].isHidden()) {
+            Textures.renderImage(textures[i], x, y);
+          }
         }
         log.info(s.toString(), textures.length);
 

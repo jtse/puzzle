@@ -37,7 +37,8 @@ public class ScriptModule extends AbstractModule {
       "hide-mouse", "true",
       "background-color", "1.0 1.0 1.0 1.0",
       "median-mouse-filter-size", "11",
-      "background-image", "");
+      "background-image", "",
+      "displacement", "disappear");
 
   private final File scriptFile;
   private final Set<String> repeatableKeys;
