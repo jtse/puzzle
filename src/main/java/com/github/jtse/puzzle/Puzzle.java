@@ -155,7 +155,7 @@ public class Puzzle {
             images.get(i).get("y")));
       }
 
-      setRegionPositions(regions, points);
+      reset(regions, points);
 
       // Define the wall
       regions[images.size() + 0] = Region.createBlock(width, 1, 0, -1);
@@ -176,7 +176,7 @@ public class Puzzle {
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-          setRegionPositions(regions, points);
+          reset(regions, points);
         }
 
         if (mouseEvent.isButtonDown() && !mouseDelta.isButtonDown()) {
@@ -230,9 +230,10 @@ public class Puzzle {
     Display.destroy();
   }
 
-  private static void setRegionPositions(Region[] regions, Point[] points) {
+  private static void reset(Region[] regions, Point[] points) {
     for (int i = 0; i < points.length; i++) {
       regions[i].setXY(points[i].x, points[i].y);
+      regions[i].setHidden(false);
     }
   }
 }
