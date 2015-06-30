@@ -43,18 +43,11 @@
       <version>${lwjgl.version}</version>
     </dependency>
     <dependency>
-      <groupId>slick</groupId>
-      <artifactId>slick</artifactId>
-      <version>274</version>
+      <groupId>org.slick2d</groupId>
+      <artifactId>slick2d-core</artifactId>
+      <version>1.0.1</version>
     </dependency>
   </dependencies>
-  <repositories>
-    <repository>
-      <id>slick</id>
-      <name>slick</name>
-      <url>http://slick.cokeandcode.com/mavenrepo</url>
-    </repository>
-  </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>onejar-maven-plugin.googlecode.com</id>
@@ -179,7 +172,7 @@
     </pluginManagement>
   </build>
   <properties>
-    <lwjgl.version>2.8.4</lwjgl.version>
+    <lwjgl.version>2.9.3</lwjgl.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
