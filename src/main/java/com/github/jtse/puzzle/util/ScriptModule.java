@@ -33,12 +33,14 @@ import com.google.inject.name.Names;
  * @author jtse
  */
 public class ScriptModule extends AbstractModule {
-  private static final Map<String, String> DEFAULTS = ImmutableMap.of(
-      "hide-mouse", "true",
-      "background-color", "1.0 1.0 1.0 1.0",
-      "median-mouse-filter-size", "11",
-      "background-image", "",
-      "displacement", "none");
+  private static final Map<String, String> DEFAULTS = ImmutableMap.<String, String>builder()
+      .put("hide-mouse", "true")
+      .put("background-color", "1.0 1.0 1.0 1.0")
+	  .put("median-mouse-filter-size", "11")
+      .put("background-image", "")
+      .put("displacement", "none")
+      .put("collision-sound", "")
+	  .build();
 
   private final File scriptFile;
   private final Set<String> repeatableKeys;
@@ -48,9 +50,6 @@ public class ScriptModule extends AbstractModule {
     this.repeatableKeys = ImmutableSet.copyOf(repeatableKeys);
   }
 
-  /* (non-Javadoc)
-   * @see com.google.inject.AbstractModule#configure()
-   */
   @Override
   protected void configure() {
     List<Map<String, String>> maps = Scripts.read(scriptFile, repeatableKeys);

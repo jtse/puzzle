@@ -56,6 +56,9 @@
 background-image=background.png
 hide-mouse=false
 
+### Collision sound. Leave blank to disable.
+collision-sound=click.wav
+
 # The path is relative to this file
 image=BlueFish.png
 x=0

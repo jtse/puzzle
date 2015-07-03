@@ -11,23 +11,19 @@ import com.github.jtse.puzzle.ogl.Region;
  * @author jtse
  * 
  */
-public class NoneDisplacement implements Displacement {
+class NoneDisplacement implements Displacement {
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * edu.binghamton.baby.puzzle.physics.Collision#apply(edu.binghamton.baby.
-   * puzzle.ogl.Region, int, int, edu.binghamton.baby.puzzle.ogl.Region[])
-   */
-  public void apply(Region source, int dx, int dy, Region[] targets) {
+  public boolean apply(Region source, int dx, int dy, Region[] targets) {
+    boolean collided = false;
     for (int i = 0; i < targets.length; i++) {
       if (targets[i] != source) {
         if (targets[i].intersects(source)) {
           source.setDxDy(-dx, -dy);
+          collided = true;
         }
       }
     }
+    return collided;
   }
 
 }

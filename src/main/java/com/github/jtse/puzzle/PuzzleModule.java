@@ -20,19 +20,13 @@ import java.io.File;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
-/**
- * @author jtse
- */
-public class PuzzleModule extends AbstractModule {
+class PuzzleModule extends AbstractModule {
   private final File basePath;
 
   public PuzzleModule(File basePath) {
     this.basePath = basePath;
   }
 
-  /* (non-Javadoc)
-   * @see com.google.inject.AbstractModule#configure()
-   */
   @Override
   protected void configure() {
     bind(File.class).annotatedWith(Names.named("@base-path")).toInstance(basePath);

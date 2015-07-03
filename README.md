@@ -26,6 +26,14 @@ Again, make sure Maven is installed and open up a command prompt:
 2. `mvn compile exec:exec`
 
 
+Import into Eclipse
+-------------------
+
+1. Launch Eclipse.
+2. File >> Import >> Maven >> Existing Maven Projects
+3. Pick [THIS DIRECTORY]
+
+
 Dependent libraries
 -------------------
 * lwjgl

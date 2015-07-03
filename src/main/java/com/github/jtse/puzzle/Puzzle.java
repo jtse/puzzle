@@ -35,8 +35,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.SoundStore;
 import org.newdawn.slick.opengl.Texture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +57,7 @@ import com.github.jtse.puzzle.ui.MousePoller;
 import com.github.jtse.puzzle.ui.UI;
 import com.github.jtse.puzzle.util.ScriptModule;
 import com.github.jtse.puzzle.util.Scripts.ScriptException;
+import com.google.common.base.Supplier;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.ProvisionException;
@@ -85,6 +89,9 @@ public class Puzzle {
 
   @Inject @Named("@script-repeatable")
   private List<Map<String, String>> images;
+  
+  @Inject
+  private Supplier<Audio> collisionAudioSupplier;
 
   /**
    * @param args
@@ -104,6 +111,7 @@ public class Puzzle {
     try {
       puzzle = Guice.createInjector(
               new PuzzleModule(scriptFile.getParentFile()),
+              new AudioModule(),
               new SceneModule(),
               new PhysicsModule(),
               new MouseModule(),
@@ -119,11 +127,13 @@ public class Puzzle {
   }
 
   public void run() {
+    int width = Display.getDisplayMode().getWidth();
+    int height = Display.getDisplayMode().getHeight();
+
     try {
-      int width = Display.getDisplayMode().getWidth();
-      int height = Display.getDisplayMode().getHeight();
 
       Display.create();
+      Audio collisionAudio = collisionAudioSupplier.get();
       // Display.setDisplayMode(new DisplayMode(width, height));
       Runnable renderBackground = renderBackgroundProvider.get();
 
@@ -164,7 +174,7 @@ public class Puzzle {
       regions[images.size() + 3] = Region.createBlock(1, height, -1, 0);
 
       boolean quit = false;
-
+      boolean collided = false;
       while (!Display.isCloseRequested() && !quit) {
         MouseEvent mouseEvent = mousePoller.poll();
         MouseEvent mouseDelta = deltaMouseEventFilter.apply(mouseEvent);
@@ -179,6 +189,7 @@ public class Puzzle {
           reset(regions, points);
         }
 
+        boolean colliding = false;
         if (mouseEvent.isButtonDown() && !mouseDelta.isButtonDown()) {
           int x = mouseEvent.getX();
           int y = height - mouseEvent.getY();
@@ -189,13 +200,19 @@ public class Puzzle {
             if (regions[i].contains(x, y)) {
               regions[i].setDxDy(dx, -dy);
 
-              displacement.apply(regions[i], dx, -dy, regions);
-
+              if (displacement.apply(regions[i], dx, -dy, regions)) {
+                colliding = true;
+              }
               i = regions.length;
             }
           }
         }
-
+        if (colliding && !collided) {
+          collisionAudio.playAsSoundEffect(1.0f, 1.0f, false);
+        }
+        collided = colliding;
+        
+        SoundStore.get().poll(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         renderBackground.run();
 
@@ -221,13 +238,16 @@ public class Puzzle {
       }
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      Display.destroy();
       UI.confirm(e.getClass() == ScriptException.class
           ? "Script file contains errors:\n" + e.getMessage()
           : e.getMessage());
       return;
+    } finally {
+      if (AL.isCreated()) {
+        AL.destroy();
+      }
+      Display.destroy();
     }
-    Display.destroy();
   }
 
   private static void reset(Region[] regions, Point[] points) {

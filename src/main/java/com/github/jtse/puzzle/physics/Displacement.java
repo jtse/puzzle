@@ -8,8 +8,6 @@ import com.github.jtse.puzzle.ogl.Region;
 /**
  * Interface for applying displacement as a result of a collisions
  * 
- * @author jtse
- * 
  */
 public interface Displacement {
   /**
@@ -21,6 +19,7 @@ public interface Displacement {
    * @param dy
    * @param targets
    *          the array of regions to check for collision and apply displacement
+   * @return true if collision detected
    */
-  void apply(Region source, int dx, int dy, Region[] targets);
+  boolean apply(Region source, int dx, int dy, Region[] targets);
 }
