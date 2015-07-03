@@ -89,7 +89,7 @@ public class Puzzle {
 
   @Inject @Named("@script-repeatable")
   private List<Map<String, String>> images;
-  
+
   @Inject
   private Supplier<Audio> collisionAudioSupplier;
 
@@ -174,8 +174,14 @@ public class Puzzle {
       regions[images.size() + 3] = Region.createBlock(1, height, -1, 0);
 
       boolean quit = false;
-      boolean collided = false;
+
+      // TODO(jtse): Move collision* to standalone class
+      int COLLISION_BITMASK = 1 << 31;
+      int COLLISION_VALUE = 3 << 30;
+      int collisionBits = 0;
       while (!Display.isCloseRequested() && !quit) {
+        collisionBits = collisionBits >>> 1;
+
         MouseEvent mouseEvent = mousePoller.poll();
         MouseEvent mouseDelta = deltaMouseEventFilter.apply(mouseEvent);
 
@@ -189,7 +195,6 @@ public class Puzzle {
           reset(regions, points);
         }
 
-        boolean colliding = false;
         if (mouseEvent.isButtonDown() && !mouseDelta.isButtonDown()) {
           int x = mouseEvent.getX();
           int y = height - mouseEvent.getY();
@@ -201,17 +206,16 @@ public class Puzzle {
               regions[i].setDxDy(dx, -dy);
 
               if (displacement.apply(regions[i], dx, -dy, regions)) {
-                colliding = true;
+                collisionBits = collisionBits | COLLISION_BITMASK;
               }
               i = regions.length;
             }
           }
         }
-        if (colliding && !collided) {
+        if (!collisionAudio.isPlaying() && COLLISION_VALUE == collisionBits) {
           collisionAudio.playAsSoundEffect(1.0f, 1.0f, false);
         }
-        collided = colliding;
-        
+
         SoundStore.get().poll(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         renderBackground.run();
